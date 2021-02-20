@@ -1,0 +1,75 @@
+"""
+wsl2の構築
+"""
+// wsl2の有効か化
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+Windowsの再起動
+
+// wsl2用のカーネルの更新。以下にアクセス
+https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+
+// wsl2を既定のバージョンに設定する
+wsl --set-default-version 2
+
+// wsl2にubuntuを落としてuser名とpasswordを設定する
+Microsoft storeでubuntuを落とす
+user passを設定
+
+// ubuntu リポジトリ内のパッケージをアップデート
+sudo apt update
+sudo apt upgrade
+
+// 環境を日本語設定する
+sudo apt install language-pack-ja
+sudo update-locale LANG=ja_JP.UTF8
+sudo apt install manpages-ja
+
+
+"""
+wsl2のubuntuにdockerのインストール
+"""
+// docker hubのリポジトリを設定する
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+    
+// dockerのofficial GPG keyを追加
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+
+// インストール対象をstable（安定したバージョン）に設定
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+  
+// docker-ceをインストール
+sudo apt-get update
+sudo apt-get install docker-ce
+
+
+"""
+docker compose のインストール
+"""
+// composeのソースを取得
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+// 実行権限を付与する
+sudo chmod +x /usr/local/bin/docker-compose
+
+// インストールしたdocker compose のバージョンを確認
+docker-compose --version
+
+
+"""
+vscodeからdockerのコンテナにログインできる様にする
+"""
+// リモート WSL 拡張機能(Remote Development)をインストール
+拡張機能のremote developmentをプラグインする
+
+// WSL2(Ubuntu)に ca 証明書追加
+sudo apt-get install wget ca-certificates
