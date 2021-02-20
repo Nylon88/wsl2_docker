@@ -1,0 +1,2 @@
+# wsl2_docker
+wsl2の構築、wsl2にlinux用のdockerをインストールしてvscodeからコンテナにログインする方法
